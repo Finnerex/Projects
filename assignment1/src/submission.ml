@@ -137,7 +137,7 @@ let rec is_ordered (ls: string list): bool =
 let rec insert_string (s: string) (l: string list): string list =
 	match l with
 	| [] -> []
-	| [x] -> x :: [s]
+	| [x] -> if String.(<) s x then s :: [x] else x :: [s]
 	| x :: xs -> if String.(<) s x then s :: x :: xs else x :: (insert_string s xs)
 
 
