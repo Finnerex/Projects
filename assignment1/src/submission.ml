@@ -136,8 +136,7 @@ let rec is_ordered (ls: string list): bool =
 
 let rec insert_string (s: string) (l: string list): string list =
 	match l with
-	| [] -> []
-	| [x] -> if String.(<) s x then s :: [x] else x :: [s]
+	| [] -> [s]
 	| x :: xs -> if String.(<) s x then s :: x :: xs else x :: (insert_string s xs)
 
 
@@ -156,12 +155,8 @@ let rec insert_string (s: string) (l: string list): string list =
 	If you don't have the same error message as us, the autograder will fail you. 
 *)
 
-let rec insert_string_exn (s: string) (l: string list): string list =
-	match l with
-	| [] -> []
-	| _ :: [] -> []
-	| x :: y :: tl -> if String.(>) x y then invalid_arg "List not sorted" else
-		if String.(<) x s then x :: s :: y :: tl else insert_string_exn s (y :: tl)
+let insert_string_exn (s: string) (l: string list): string list =
+	if is_ordered l then insert_string s l else invalid_arg "List not sorted"
 
 
 (*
@@ -170,12 +165,10 @@ let rec insert_string_exn (s: string) (l: string list): string list =
 	to an initially empty list.
 *)
 
-let insertion_sort (l: string list): string list =
-	unimplemented ()
-	(* match l with
-	| [] -> []
-	| x :: [] -> [x]
-	| x :: y :: tl -> if String.(<) x y then x :: (insertion_sort (y :: tl)) else y :: (insertion_sort (x :: tl)) *)
+let rec insertion_sort (l: string list): string list =
+	match l with
+		| [] -> []
+		| x :: xs -> xs |> insertion_sort |> insert_string x
 
 (*
 	Define a function to remove the lexicographically maximum string in a list of strings.
