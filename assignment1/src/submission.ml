@@ -178,8 +178,14 @@ let rec insertion_sort (l: string list): string list =
 	  if the list is not empty.
 *)
 
-let remove_max (l: string list): (string * string list, string) result =
-	unimplemented ()
+let rec remove_max (l: string list): (string * string list, string) result =
+ match l with
+	| [] -> Error ("empty list")
+	| x :: [] -> Ok (x, [])
+	| x :: y :: xs -> if String.(>) x y then
+		Ok (x, y :: (match remove_max xs with | Error _ -> [] | Ok (_, a)-> a))
+		else
+		Ok (y, x :: (match remove_max xs with | Error _ -> [] | Ok (_, a)-> a))
 
 (*
 	Write a sort routine by repeated invocations of remove_max to pull out the largest
